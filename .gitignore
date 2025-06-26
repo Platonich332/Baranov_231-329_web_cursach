@@ -1,0 +1,8 @@
+venv/
+uploads/
+.env
+__pycache__/
+*.pyc
+*.db
+*.sqlite3
+cursach_dump.sql 
