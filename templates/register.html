@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация - Электронная библиотека{% endblock %}
+
+{% block content %}
+<div class="auth-page container">
+    <div class="auth-form-container">
+        <h2>Регистрация</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="username">Логин:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Роль:</label>
+                <select id="role" name="role" required>
+                    <option value="buyer">Покупатель (User)</option>
+                    <option value="author">Автор</option>
+                    <option value="admin">Администратор</option>
+                </select>
+            </div>
+            <div class="form-group author-fields" style="display:none;">
+                <label for="last_name">Фамилия:</label>
+                <input type="text" id="last_name" name="last_name">
+            </div>
+            <div class="form-group author-fields" style="display:none;">
+                <label for="first_name">Имя:</label>
+                <input type="text" id="first_name" name="first_name">
+            </div>
+            <div class="form-group author-fields" style="display:none;">
+                <label for="middle_name">Отчество:</label>
+                <input type="text" id="middle_name" name="middle_name">
+            </div>
+            <script>
+            // Показывать/скрывать поля для автора
+            const roleSelect = document.getElementById('role');
+            const authorFields = document.querySelectorAll('.author-fields');
+            roleSelect.addEventListener('change', function() {
+                if (this.value === 'author') {
+                    authorFields.forEach(f => { f.style.display = 'block'; f.querySelector('input').required = true; });
+                } else {
+                    authorFields.forEach(f => { f.style.display = 'none'; f.querySelector('input').required = false; });
+                }
+            });
+            // При загрузке страницы
+            if (roleSelect.value === 'author') {
+                authorFields.forEach(f => { f.style.display = 'block'; f.querySelector('input').required = true; });
+            }
+            </script>
+            <button type="submit" class="btn primary">Зарегистрироваться</button>
+        </form>
+        <div class="auth-links">
+            <p>Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %} 

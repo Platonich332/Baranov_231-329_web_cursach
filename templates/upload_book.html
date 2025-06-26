@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Загрузить книгу - Электронная библиотека{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Загрузить новую книгу</h1>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <form method="POST" action="{{ url_for('upload_book') }}" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">Название книги:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Описание:</label>
+            <textarea id="description" name="description" rows="6" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="price">Цена (₽):</label>
+            <input type="number" id="price" name="price" step="0.01" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="file_format">Формат файла:</label>
+            <select id="file_format" name="file_format" required>
+                <option value="PDF">PDF</option>
+                <option value="EPUB">EPUB</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="book_file">Файл книги:</label>
+            <input type="file" id="book_file" name="book_file" accept=".pdf,.epub" required>
+        </div>
+        
+        <button type="submit" class="btn primary">Загрузить книгу</button>
+    </form>
+</div>
+{% endblock %} 

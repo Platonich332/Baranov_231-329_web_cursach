@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Главная - Электронная библиотека{% endblock %}
+
+{% block content %}
+        <h1>Откройте мир знаний с нашей электронной библиотекой</h1>
+        <p>Тысячи книг от лучших авторов в вашем распоряжении. Читайте, где угодно и когда угодно.</p>
+    <div class="hero-buttons">
+        <a href="{{ url_for('catalog') }}" class="hero-button secondary">Начать чтение</a>
+        <a href="{{ url_for('register') }}" class="hero-button secondary">Стать автором</a>
+    </div>
+
+    <section class="become-author">
+        <div class="container">
+            <div class="author-content">
+                <h2>Станьте автором вашей библиотеки</h2>
+                <p>Поделитесь своими произведениями с тысячами читателей. Наша платформа предоставляет авторам удобные инструменты для публикации и продажи электронных книг:</p>
+                <ul>
+                    <li>Простая загрузка и публикация книг в форматах PDF и EPUB</li>
+                    <li>Полный контроль над ценообразованием</li>
+                    <li>Подробная статистика продаж и аналитика</li>
+                    <li>Выплаты без задержек</li>
+                </ul>
+                <button class="btn primary">Стать автором</button>
+            </div>
+            <div class="author-image-placeholder">
+                <!-- Иконка или изображение -->
+                 &#x270D;
+            </div>
+        </div>
+    </section>
+
+    <section class="customer-reviews">
+        <div class="container">
+            <h2>Отзывы наших читателей</h2>
+            <div class="reviews-list">
+                <div class="review-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"Отличная библиотека с огромным выбором книг. Удобный интерфейс и быстрая загрузка. Теперь все мои любимые книги всегда со мной на планшете!"</p>
+                    <div class="reviewer-info">
+                        <div class="avatar-placeholder"></div>
+                        <div class="name-location">
+                            <p class="name">Екатерина Смирнова</p>
+                            <p class="location">Москва</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"Как автор, я очень доволен сотрудничеством с этой платформой. Удобные инструменты для публикации и прозрачная система выплат. Рекомендую всем писателям!"</p>
+                    <div class="reviewer-info">
+                        <div class="avatar-placeholder"></div>
+                        <div class="name-location">
+                            <p class="name">Алексей Петров</p>
+                            <p class="location">Санкт-Петербург</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="stars">★★★★☆</div>
+                    <p>"Пользуюсь библиотекой уже больше года. Нравится большой выбор книг и удобная система поиска. Единственное пожелание - добавить больше книг по психологии."</p>
+                    <div class="reviewer-info">
+                        <div class="avatar-placeholder"></div>
+                        <div class="name-location">
+                            <p class="name">Ирина Козлова</p>
+                            <p class="location">Новосибирск</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter">
+        <div class="container">
+            <h2>Подпишитесь на нашу рассылку</h2>
+            <p>Получайте уведомления о новых книгах, акциях и специальных предложениях</p>
+            <div class="newsletter-form">
+                <input type="email" placeholder="Ваш email">
+                <button class="btn primary">Подписаться</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="popular-books">
+        <div class="container">
+            <div class="section-header">
+                <h2>Популярные книги</h2>
+                <div class="carousel-nav">
+                    <button class="prev-btn"><</button>
+                    <button class="next-btn">></button>
+                </div>
+            </div>
+            <div class="book-list">
+                {% for book in popular_books %}
+                <div class="book-card">
+                    <a href="{{ url_for('book', book_id=book.id) }}" class="book-link">
+                        <div class="book-cover-placeholder">
+                            {% if book.cover_image %}
+                                <img src="{{ url_for('uploaded_file', filename=book.cover_image.replace('uploads/', '')) }}" alt="{{ book.title }}">
+                            {% endif %}
+                        </div>
+                        <div class="book-info">
+                            <p class="author">{{ book.author.email }}</p>
+                            <h3 class="title">{{ book.title }}</h3>
+                            <div class="rating">
+                                {% if book.reviews %}
+                                    {% set avg_rating = (book.reviews|sum(attribute='rating') / book.reviews|length)|round(1) %}
+                                    <span class="stars">
+                                        {% for i in range(5) %}
+                                            {% if i < avg_rating|int %}★{% else %}☆{% endif %}
+                                        {% endfor %}
+                                    </span>
+                                    <span class="reviews">{{ avg_rating }} ({{ book.reviews|length }})</span>
+                                {% else %}
+                                    <span class="stars">☆☆☆☆☆</span>
+                                    <span class="reviews">0.0 (0)</span>
+                                {% endif %}
+                            </div>
+                            <div class="price-cart">
+                                <span class="price">{{ '%.0f'|format(book.price) }} ₽</span>
+                                <button class="cart-button" title="Добавить в корзину">&#x1F6D2;</button>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% else %}
+                <div class="no-books">Нет популярных книг</div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/popular-books-carousel.js') }}" defer></script>
+{% endblock %} 

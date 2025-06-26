@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Заказ #{{ order.id }} - Электронная библиотека{% endblock %}
+
+{% block content %}
+<div class="order-page container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="order-header">
+        <h1>Заказ #{{ order.id }}</h1>
+        <div class="order-status {{ order.status }}">
+            {% if order.status == 'pending' %}
+                Ожидает подтверждения
+            {% elif order.status == 'completed' %}
+                Подтверждён
+            {% elif order.status == 'cancelled' %}
+                Отменён
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="order-info">
+        <div class="info-group">
+            <h3>Информация о заказе</h3>
+            <p><strong>Дата заказа:</strong> {{ order.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+            <p><strong>Сумма заказа:</strong> {{ "%.2f"|format(order.total_amount) }} ₽</p>
+            <p><strong>Статус:</strong> 
+                {% if order.status == 'pending' %}
+                    Ожидает подтверждения
+                {% elif order.status == 'completed' %}
+                    Подтверждён
+                {% elif order.status == 'cancelled' %}
+                    Отменён
+                {% endif %}
+            </p>
+        </div>
+        
+        <div class="info-group">
+            <h3>Информация о покупателе</h3>
+            <p><strong>Имя:</strong> {{ order.buyer.name }}</p>
+            <p><strong>Email:</strong> {{ order.buyer.email }}</p>
+        </div>
+    </div>
+    
+    <div class="order-items">
+        <h2>Книги в заказе</h2>
+        <div class="items-list">
+            {% for item in order.items %}
+                <div class="order-item">
+                    <div class="item-cover">
+                        {% if item.book.cover_image %}
+                            <img src="{{ url_for('static', filename=item.book.cover_image) }}" alt="{{ item.book.title }}">
+                        {% else %}
+                            <div class="no-cover">Нет обложки</div>
+                        {% endif %}
+                    </div>
+                    <div class="item-info">
+                        <h3>{{ item.book.title }}</h3>
+                        <p class="author">{{ item.book.author.name }}</p>
+                        <div class="price">{{ "%.2f"|format(item.price) }} ₽</div>
+                        {% if order.status == 'completed' %}
+                            <a href="{{ url_for('download_book', book_id=item.book.id) }}" class="btn secondary">Скачать</a>
+                        {% elif order.status == 'pending' %}
+                            <button class="btn secondary" disabled>Ожидает подтверждения</button>
+                        {% elif order.status == 'cancelled' %}
+                            <button class="btn danger" disabled>Заказ отменён</button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    {% if current_user.role == 'admin' and order.status == 'pending' %}
+        <div class="order-actions">
+            <form action="{{ url_for('update_order_status', order_id=order.id) }}" method="POST" class="status-form">
+                <input type="hidden" name="status" value="completed">
+                <button type="submit" class="btn primary">Подтвердить оплату</button>
+            </form>
+            <form action="{{ url_for('update_order_status', order_id=order.id) }}" method="POST" class="status-form">
+                <input type="hidden" name="status" value="cancelled">
+                <button type="submit" class="btn danger">Отменить заказ</button>
+            </form>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

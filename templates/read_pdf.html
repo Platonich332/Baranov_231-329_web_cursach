@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Чтение: {{ book.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Чтение книги: {{ book.title }}</h1>
+    <div class="pdf-viewer" style="width:100%; max-width:900px; margin:0 auto;">
+        <embed src="/{{ file_path }}" type="application/pdf" width="100%" height="700px" />
+    </div>
+    <a href="{{ url_for('download_book', book_id=book.id) }}" class="btn primary" style="margin-top:1rem;">Скачать PDF</a>
+    <a href="{{ url_for('book', book_id=book.id) }}" class="btn secondary" style="margin-top:1rem;">Назад к книге</a>
+</div>
+{% endblock %} 

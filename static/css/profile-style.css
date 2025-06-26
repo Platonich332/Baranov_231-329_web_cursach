@@ -1,0 +1,338 @@
+.profile-page {
+    padding: 2rem 0;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.profile-content {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.profile-sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    margin-bottom: 1.5rem;
+}
+
+.user-info {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.avatar-placeholder {
+    width: 120px;
+    height: 120px;
+    background: #f0f0f0;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+}
+
+.user-info h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+}
+
+.user-info .email {
+    color: #666;
+    margin: 0 0 0.5rem;
+}
+
+.user-info .role {
+    color: #888;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.profile-nav {
+    margin-top: 1rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.profile-nav li {
+    border-bottom: 1px solid #eee;
+}
+
+.profile-nav li:last-child {
+    border-bottom: none;
+}
+
+.profile-nav a {
+    display: block;
+    padding: 1rem 1.5rem;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.profile-nav a:hover,
+.profile-nav a.active {
+    background-color: #f5f5f5;
+    color: #007bff;
+}
+
+.profile-main {
+    flex-grow: 1;
+}
+
+.profile-section {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.profile-section h2 {
+    margin: 0 0 1.5rem;
+    font-size: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn.primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn.primary:hover {
+    background-color: #0056b3;
+}
+
+.btn.secondary {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.btn.secondary:hover {
+    background-color: #545b62;
+}
+
+.btn.danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn.danger:hover {
+    background-color: #c82333;
+}
+
+.books-list,
+.orders-list,
+.library-list,
+.users-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.book-card,
+.order-card,
+.library-book,
+.user-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.book-cover-placeholder {
+    width: 100%;
+    height: 200px;
+    background: #f0f0f0;
+}
+
+.book-info,
+.order-info,
+.user-info {
+    padding: 1rem;
+}
+
+.book-info h3,
+.order-info h3,
+.user-info h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+}
+
+.book-info .price,
+.order-info .price {
+    color: #007bff;
+    font-weight: bold;
+    margin: 0.5rem 0;
+}
+
+.book-actions,
+.order-actions,
+.user-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+}
+
+.order-date {
+    color: #666;
+}
+
+.order-status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    background: #e9ecef;
+}
+
+.order-status.completed {
+    background: #28a745;
+    color: #fff;
+}
+
+.order-status.cancelled {
+    background: #dc3545;
+    color: #fff;
+}
+
+.order-total {
+    padding: 1rem;
+    background: #f8f9fa;
+    border-top: 1px solid #eee;
+    text-align: right;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .profile-content {
+        flex-direction: column;
+    }
+
+    .profile-sidebar {
+        width: 100%;
+    }
+
+    .books-list,
+    .orders-list,
+    .library-list,
+    .users-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+.edit-book-page {
+    padding: 2rem 0;
+}
+
+.edit-book-form {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.help-text {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+}
+
+.current-cover {
+    margin-top: 1rem;
+}
+
+.current-cover img {
+    max-width: 200px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.profile-main .profile-section {
+    margin-bottom: 2rem;
+    padding: 2rem;
+}
+
+.user-card .user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: 100%;
+    gap: 0.5rem;
+}
+
+.user-card .user-info form,
+.user-card .user-info a {
+    width: 100%;
+    margin: 0;
+}
+
+.user-card .user-info .btn {
+    width: 100%;
+    margin: 0 0 0.5rem 0;
+    box-sizing: border-box;
+}
+
+.user-card .user-info form:last-child .btn {
+    margin-bottom: 0;
+} 

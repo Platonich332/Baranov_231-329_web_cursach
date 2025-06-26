@@ -1,0 +1,217 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0; /* Light gray background */
+}
+
+.container {
+    display: flex;
+    width: 90%; /* Adjust as needed */
+    max-width: 1000px; /* Max width of the container */
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    flex-grow: 1; /* Allow container to grow and push footer down */
+}
+
+.image-section {
+    flex: 1; /* Take up half the space */
+    background-color: #eee; /* Placeholder background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the area */
+}
+
+.form-section {
+    flex: 1; /* Take up half the space */
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.logo {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 5px;
+    color: #6a1b9a; 
+}
+
+.subtitle {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.auth-tabs .tab {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.auth-tabs .tab.active {
+    background-color: #6a1b9a; /* Example active tab color */
+    color: #fff;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box; /* Include padding in width */
+    min-height: 40px; /* Ensure minimum height for inputs */
+}
+
+.role-selection .roles {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+    align-items: center; /* Vertically align role buttons */
+    min-height: 40px; /* Ensure minimum height */
+}
+
+.role-selection .role-button {
+    flex: 1;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    font-size: 1em;
+    text-align: center;
+    min-height: 50px; /* Ensure minimum height for role buttons */
+}
+
+.role-selection .role-button.active {
+    border-color: #6a1b9a; /* Active role border color */
+    background-color: #e8eaf6; /* Light background for active */
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    margin-top: 10px; /* Space above button */
+}
+
+.btn.primary {
+    background-color: #6a1b9a; /* Primary button color */
+    color: #fff;
+}
+
+.or-divider {
+    text-align: center;
+    margin: 20px 0;
+    color: #888;
+    position: relative;
+}
+
+.or-divider::before,
+.or-divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 40%; /* Adjust width as needed */
+    height: 1px;
+    background-color: #ddd;
+}
+
+.or-divider::before {
+    left: 0;
+}
+
+.or-divider::after {
+    right: 0;
+}
+
+.social-logins {
+    display: flex;
+    gap: 10px;
+    width: 100%; /* Ensure social logins take full width */
+}
+
+.social-btn {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 1em;
+    text-align: center; /* Center text and potential icons */
+    min-height: 40px; /* Ensure consistent height */
+}
+
+.social-btn.google img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.social-btn.facebook img {
+     width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+#login-form,
+#register-form {
+    width: 100%;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+#login-form .form-group,
+#register-form .form-group {
+    margin-bottom: 15px; /* Consistent bottom margin for form groups */
+    width: 100%; /* Ensure form groups take full width */
+}
+
+footer {
+    margin-top: 20px; /* Space above the footer */
+    text-align: center;
+    color: #555; 
+    padding: 10px 0;
+    width: 100%;
+} 

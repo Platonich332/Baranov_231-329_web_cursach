@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Электронная библиотека{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main-style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth-style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cart-style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/book-style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/catalog-style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile-style.css') }}">
+    {% block additional_css %}{% endblock %}
+    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="logo" style="display: flex; align-items: center;">
+                <img src="{{ url_for('static', filename='free-icon-book-stack-3227053.png') }}" alt="Логотип" style="height: 48px; width: 48px; object-fit: contain;">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}" class="{% if request.path == url_for('index') %}active{% endif %}">Главная</a></li>
+                    <li><a href="{{ url_for('catalog') }}" class="{% if request.path == url_for('catalog') %}active{% endif %}">Каталог</a></li>
+                    <li><a href="{{ url_for('authors') }}" class="{% if request.path == url_for('authors') %}active{% endif %}">Авторы</a></li>
+                    <li><a href="{{ url_for('about') }}" class="{% if request.path == url_for('about') %}active{% endif %}">О нас</a></li>
+                </ul>
+            </nav>
+            <div class="search-login">
+                <div class="search-bar">
+                    <span class="search-icon">&#x1F50D;</span>
+                    <input type="text" placeholder="Поиск книг...">
+                </div>
+                <a href="{{ url_for('cart') }}" class="cart">
+                    <span class="cart-icon">&#x1F6D2;</span>
+                    {% if current_user.is_authenticated and current_user.cart and current_user.cart.items %}
+                        <span class="cart-count">{{ current_user.cart.items|length }}</span>
+                    {% endif %}
+                </a>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('profile') }}" class="btn primary">Профиль</a>
+                    <a href="{{ url_for('logout') }}" class="btn primary">Выйти</a>
+                {% else %}
+                    <a href="{{ url_for('register') }}" class="btn primary">Войти</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">logo</div>
+                <p>Ваша электронная библиотека с тысячами книг в любом формате.</p>
+                <div class="social-links">
+                    <a href="#">&#x1F4F1;</a>
+                    <a href="#">&#x1F4F1;</a>
+                    <a href="#">&#x1F4F1;</a>
+                </div>
+            </div>
+            <div class="footer-nav">
+                <h3>Навигация</h3>
+                <ul class="footer-links">
+                    <li><a href="{{ url_for('index') }}">Главная</a></li>
+                    <li><a href="{{ url_for('catalog') }}">Каталог</a></li>
+                    <li><a href="{{ url_for('authors') }}">Авторы</a></li>
+                    <li><a href="{{ url_for('about') }}">О нас</a></li>
+                </ul>
+            </div>
+            <div class="footer-help">
+                <h3>Помощь</h3>
+                <ul class="footer-links">
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Доставка</a></li>
+                    <li><a href="#">Возврат</a></li>
+                    <li><a href="#">Способы оплаты</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Контакты</h3>
+                <p>&#x1F4CD; г. Москва, ул. Пушкина, д. 10</p>
+                <p>&#x260E; +7 (495) 123-45-67</p>
+                <p>&#x1F4E7; info@example.ru</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 

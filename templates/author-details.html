@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Информация об авторе</title>
+    <link rel="stylesheet" href="main-style.css">
+    <!-- Стили для страницы информации об авторе будут добавлены здесь -->
+    <link rel="stylesheet" href="author-details-style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">logo</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="catalog.html">Каталог</a></li>
+                    <li><a href="authors.html">Авторы</a></li>
+                    <li><a href="about.html">О нас</a></li>
+                </ul>
+            </nav>
+            <div class="search-login">
+                <div class="search-bar">
+                    <span class="search-icon">&#x1F50D;</span>
+                    <input type="text" placeholder="Поиск книг...">
+                </div>
+                <div class="cart">
+                    <span class="cart-icon">&#x1F6D2;</span>
+                </div>
+                <button class="btn primary">Войти</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Содержимое страницы информации об авторе будет здесь -->
+        <section class="author-details-section">
+            <div class="container">
+                <div class="author-header">
+                    <div class="author-avatar-large-placeholder"></div>
+                    <div class="author-basic-info">
+                        <h1>Имя Автора</h1>
+                        <p class="author-bio-summary">Краткое описание/биография автора.</p>
+                        <div class="rating">
+                             <span class="stars">★★★★★</span>
+                            <span class="reviews">Средний рейтинг и количество отзывов</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="author-full-bio">
+                    <h2>Биография</h2>
+                    <p>Полная биография автора...</p>
+                </div>
+
+                <div class="author-works">
+                    <h2>Произведения</h2>
+                    <div class="book-list"> <!-- Reusing book-list class for grid layout -->
+                        <!-- Пример карточки книги (можно использовать стили из main-style.css) -->
+                         <div class="book-card">
+                            <div class="book-cover-placeholder"></div>
+                            <div class="book-info">
+                                <p class="author">Имя Автора</p>
+                                <h3 class="title">Название книги</h3>
+                                <div class="rating">
+                                    <span class="stars">★★★★☆</span>
+                                    <span class="reviews">4.5 (128)</span>
+                                </div>
+                                <div class="price-cart">
+                                    <span class="price">450 ₽</span>
+                                    <button class="cart-button">&#x1F6D2;</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Повторить для других книг автора -->
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+     <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">logo</div>
+                    <p>Ваша электронная библиотека с тысячами книг в любом формате.</p>
+                    <div class="social-links">
+                        <a href="#">&#x1F4F1;</a>
+                        <a href="#">&#x1F4F1;</a>
+                        <a href="#">&#x1F4F1;</a>
+                    </div>
+                </div>
+                <div class="footer-nav">
+                    <h3>Навигация</h3>
+                    <ul>
+                        <li><a href="#">Главная</a></li>
+                        <li><a href="#">Каталог</a></li>
+                        <li><a href="#">Авторы</a></li>
+                        <li><a href="#">О нас</a></li>
+                    </ul>
+                </div>
+                <div class="footer-help">
+                    <h3>Помощь</h3>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Доставка</a></li>
+                        <li><a href="#">Возврат</a></li>
+                        <li><a href="#">Способы оплаты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Контакты</h3>
+                    <p>&#x1F4CD; г. Москва, ул. Пушкина, д. 10</p>
+                    <p>&#x260E; +7 (495) 123-45-67</p>
+                    <p>&#x1F4E7; info@example.ru</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html> 

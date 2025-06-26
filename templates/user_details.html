@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Пользователь {{ user.email }} - Электронная библиотека{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Профиль пользователя</h1>
+    <div class="user-details-card">
+        <h2>{{ user.email }}</h2>
+        <p><strong>Роль:</strong> {{ user.role }}</p>
+        <p><strong>Дата регистрации:</strong> {{ user.created_at.strftime('%d.%m.%Y') }}</p>
+        <h3>Книги пользователя</h3>
+        {% if user.books %}
+            <ul>
+                {% for book in user.books %}
+                    <li><a href="{{ url_for('book', book_id=book.id) }}">{{ book.title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Нет загруженных книг.</p>
+        {% endif %}
+        <h3>Покупки пользователя</h3>
+        {% if user.orders %}
+            <ul>
+                {% for order in user.orders %}
+                    <li>
+                        Заказ #{{ order.id }} от {{ order.created_at.strftime('%d.%m.%Y') }} — {{ order.status }}
+                        <ul>
+                            {% for item in order.items %}
+                                <li>{{ item.book.title }} ({{ item.price }} ₽)</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Нет покупок.</p>
+        {% endif %}
+        <h3>Отзывы пользователя</h3>
+        {% if user.reviews %}
+            <ul>
+                {% for review in user.reviews %}
+                    <li>
+                        Книга: <a href="{{ url_for('book', book_id=review.book_id) }}">{{ review.book.title }}</a> — Оценка: {{ review.rating }}<br>
+                        {{ review.comment }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Нет отзывов.</p>
+        {% endif %}
+    </div>
+    <a href="{{ url_for('profile') }}" class="btn secondary">Назад к профилю</a>
+</div>
+{% endblock %} 

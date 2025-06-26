@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} - Электронная библиотека{% endblock %}
+
+{% block content %}
+<div class="book-page container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="book-header" style="display: flex; align-items: flex-start; gap: 2rem;">
+        <div class="book-cover" style="flex: 0 0 280px; max-width: 280px;">
+            {% if book.cover_image %}
+                <img src="{{ url_for('uploaded_file', filename=book.cover_image.replace('uploads/', '')) }}" alt="{{ book.title }}" style="width: 100%; height: auto; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            {% else %}
+                <div class="no-cover">Нет обложки</div>
+            {% endif %}
+        </div>
+        <div class="book-info" style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start;">
+            <h1 style="margin-bottom: 0.5rem;">{{ book.title }}</h1>
+            <p class="author" style="color: #666; margin-bottom: 0.5rem;">Автор: {{ book.author.username or book.author.email }}</p>
+            <div class="categories" style="margin-bottom: 0.5rem;">
+                {% for category in book.categories %}
+                    <span class="category">{{ category.name }}</span>
+                {% endfor %}
+            </div>
+            <div class="price" style="font-size: 1.5rem; font-weight: bold; color: #007bff; margin-bottom: 1rem;">{{ "%.2f"|format(book.price) }} ₽</div>
+            <div class="actions" style="margin-bottom: 1.5rem;">
+                {% if current_user.is_authenticated %}
+                    {% if book in current_user.purchased_books %}
+                        <a href="{{ url_for('download_book', book_id=book.id) }}" class="btn primary">Скачать</a>
+                    {% else %}
+                        <form action="{{ url_for('add_to_cart', book_id=book.id) }}" method="POST" class="add-to-cart-form">
+                            <button type="submit" class="btn primary">Добавить в корзину</button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn primary">Войдите для покупки</a>
+                {% endif %}
+            </div>
+            <h2 style="margin-top: 1.5rem;">Описание</h2>
+            <p>{{ book.description }}</p>
+        </div>
+    </div>
+    
+    <div class="book-reviews">
+        <h2>Отзывы</h2>
+        
+        {% if current_user.is_authenticated %}
+            <div class="review-form">
+                <h3>Оставить отзыв</h3>
+                <form action="{{ url_for('add_review', book_id=book.id) }}" method="POST">
+                    <div class="form-group">
+                        <label for="rating">Оценка:</label>
+                        <div class="rating-select">
+                            {% for i in range(1, 6) %}
+                                <input type="radio" id="rating{{ i }}" name="rating" value="{{ i }}" required>
+                                <label for="rating{{ i }}">{{ i }}</label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment">Комментарий:</label>
+                        <textarea id="comment" name="comment" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn primary">Отправить отзыв</button>
+                </form>
+            </div>
+        {% endif %}
+        
+        <div class="reviews-list">
+            {% for review in book.reviews %}
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-author">{{ review.user.email }}</div>
+                        <div class="review-rating">
+                            {% for i in range(1, 6) %}
+                                <span class="star {% if i <= review.rating %}filled{% endif %}">★</span>
+                            {% endfor %}
+                        </div>
+                        <div class="review-date">{{ review.created_at.strftime('%d.%m.%Y') }}</div>
+                    </div>
+                    <div class="review-content">
+                        <p>{{ review.comment }}</p>
+                    </div>
+                    {% if current_user.is_authenticated and (current_user.id == review.user_id or current_user.role == 'admin') %}
+                        <div class="review-actions">
+                            <a href="{{ url_for('delete_review', book_id=book.id, review_id=review.id) }}" 
+                               class="btn danger"
+                               onclick="return confirm('Вы уверены, что хотите удалить этот отзыв?')">
+                                Удалить
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% else %}
+                <p class="no-reviews">Пока нет отзывов. Будьте первым!</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/book.js') }}"></script>
+{% endblock %} 

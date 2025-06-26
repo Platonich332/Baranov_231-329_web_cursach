@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Авторы - Электронная библиотека{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/authors-style.css') }}">
+{% endblock %}
+
+{% block content %}
+    <h1>Каталог авторов</h1>
+    <div class="authors-page-content container">
+        <aside class="filter-sidebar">
+            <h3>Фильтры</h3>
+            <form id="authorFilters" method="get" action="{{ url_for('authors') }}">
+                <div class="filter-group">
+                    <h4>Жанры</h4>
+                    <label><input type="checkbox" name="genre" value="fantasy"> Фантастика</label>
+                    <label><input type="checkbox" name="genre" value="detective"> Детективы</label>
+                    <label><input type="checkbox" name="genre" value="novel"> Романы</label>
+                    <label><input type="checkbox" name="genre" value="science"> Научная литература</label>
+                    <label><input type="checkbox" name="genre" value="business"> Бизнес</label>
+                    <label><input type="checkbox" name="genre" value="psychology"> Психология</label>
+                </div>
+                <div class="filter-group">
+                    <h4>Страна</h4>
+                    <label><input type="checkbox" name="country" value="russia"> Россия</label>
+                    <label><input type="checkbox" name="country" value="usa"> США</label>
+                    <label><input type="checkbox" name="country" value="uk"> Великобритания</label>
+                    <label><input type="checkbox" name="country" value="france"> Франция</label>
+                    <label><input type="checkbox" name="country" value="germany"> Германия</label>
+                </div>
+                <div class="filter-group">
+                    <h4>Период</h4>
+                    <label><input type="checkbox" name="period" value="classic"> Классика</label>
+                    <label><input type="checkbox" name="period" value="modern"> Современная литература</label>
+                    <label><input type="checkbox" name="period" value="new"> Новинки</label>
+                </div>
+                <button type="submit" class="btn primary">Применить</button>
+            </form>
+        </aside>
+        <div class="authors-list">
+            <div class="sort-show">
+                <div class="sort-by">
+                    <span>Сортировать по:</span>
+                    <select id="sortBy">
+                        <option value="popularity">Популярности</option>
+                        <option value="alphabet">Алфавиту</option>
+                        <option value="books">Количеству книг</option>
+                    </select>
+                </div>
+                <div class="show-items">
+                    <span>Показать:</span>
+                    <select id="showItems">
+                        <option value="12">12</option>
+                        <option value="24">24</option>
+                        <option value="36">36</option>
+                    </select>
+                </div>
+            </div>
+            <div id="authorCards" class="author-cards">
+                {% if authors %}
+                    {% for author in authors %}
+                        <div class="author-card">
+                            <div class="author-avatar"></div>
+                            <div class="author-info">
+                                <div class="author-name">{{ author.username }}</div>
+                                <div class="author-email">{{ author.email }}</div>
+                                <div class="author-books-count">Книг: {{ author.books|length }}</div>
+                                <a href="{{ url_for('user_details', user_id=author.id) }}" class="btn secondary">Подробнее</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Авторы не найдены.</p>
+                {% endif %}
+            </div>
+            <div class="pagination" style="display: none;">
+                <button>&lt;</button>
+                <button class="active">1</button>
+                <button>2</button>
+                <button>3</button>
+                <span>...</span>
+                <button>10</button>
+                <button>&gt;</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function applyFilters(event) {
+            event.preventDefault();
+            
+            // Get all selected filters
+            const selectedGenres = Array.from(document.querySelectorAll('input[name="genre"]:checked')).map(cb => cb.value);
+            const selectedCountries = Array.from(document.querySelectorAll('input[name="country"]:checked')).map(cb => cb.value);
+            const selectedPeriods = Array.from(document.querySelectorAll('input[name="period"]:checked')).map(cb => cb.value);
+            
+            // Hide the no filters message
+            document.getElementById('noFiltersMessage').style.display = 'none';
+            
+            // Show the author cards section
+            const authorCards = document.getElementById('authorCards');
+            authorCards.style.display = 'block';
+            
+            // Here you would typically make an AJAX call to get filtered authors
+            // For now, we'll just show the existing cards
+            const existingCards = document.querySelectorAll('.author-card');
+            existingCards.forEach(card => {
+                card.style.display = 'flex';
+            });
+            
+            // Show pagination
+            document.querySelector('.pagination').style.display = 'flex';
+            
+            return false;
+        }
+    </script>
+{% endblock %} 

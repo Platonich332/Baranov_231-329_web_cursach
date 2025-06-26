@@ -1,0 +1,57 @@
+/* Register Page Styles */
+.register-section {
+    padding: 60px 0;
+    background-color: #f8f8f8; /* Light background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 150px); /* Adjust height based on header/footer height */
+}
+
+.register-form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Limit form width */
+    text-align: left;
+}
+
+.register-form h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 24px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+    font-size: 14px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.register-form .btn.primary {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 4px;
+    margin-top: 10px;
+} 

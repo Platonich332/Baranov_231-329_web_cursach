@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block title %}Профиль - Электронная библиотека{% endblock %}
+
+{% block content %}
+<h1 class="profile-main-title">Личный кабинет</h1>
+<div class="profile-page container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="profile-content">
+        <div class="profile-sidebar">
+            <div class="user-info">
+                 <div class="avatar-placeholder"></div>{# Placeholder for avatar #}
+                <div class="user-login-row">
+                    <span class="user-login">{{ current_user.username }}</span>
+                </div>
+                <div class="email" style="color:#666;">{{ current_user.email }}</div>
+                <p class="role">Роль: {{ current_user.role }}</p>
+            </div>
+
+            <nav class="profile-nav">
+                <ul>
+                    <li><a href="#profile" class="active">Профиль</a></li>
+                    {% if current_user.role == 'author' %}
+                        <li><a href="#my-books">Мои книги</a></li>
+                        <li><a href="#upload-book">Загрузить книгу</a></li>
+                    {% endif %}
+                    {# Добавить ссылки для других ролей или секций #}
+                </ul>
+            </nav>
+        </div>
+
+        <div class="profile-main">
+            <section id="profile" class="profile-section">
+                <h2>Редактирование профиля</h2>
+                 <form method="POST" action="{{ url_for('profile') }}">
+                    <input type="hidden" name="form_type" value="edit_profile">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" value="{{ current_user.email }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="current_password">Текущий пароль:</label>
+                        <input type="password" id="current_password" name="current_password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new_password">Новый пароль:</label>
+                        <input type="password" id="new_password" name="new_password">
+                    </div>
+                    
+                    <button type="submit" class="btn primary">Сохранить изменения</button>
+                 </form>
+            </section>
+
+            {% if current_user.role == 'author' %}
+                <section id="my-books" class="profile-section">
+                    <h2>Мои книги</h2>
+                    <div class="books-grid">
+                        {% for book in current_user.books %}
+                            <div class="book-card">
+                                <h4>{{ book.title }}</h4>
+                                <p>{{ book.description[:100] }}...</p>
+                                <p>Цена: {{ book.price }} ₽</p>
+                                <a href="{{ url_for('book', book_id=book.id) }}" class="btn secondary">Подробнее</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endif %}
+
+            {% if current_user.role == 'buyer' %}
+                <section id="my-orders" class="profile-section">
+                    <h2>Мои покупки</h2>
+                    <div class="orders-list">
+                        {% for order in current_user.orders %}
+                            {% for item in order.items %}
+                                <div class="order-card">
+                                    <h4>{{ item.book.title }}</h4>
+                                    <p>Дата покупки: {{ order.created_at.strftime('%d.%m.%Y') }}</p>
+                                    <p>Статус: 
+                                        {% if order.status == 'pending' %}
+                                            Ожидает подтверждения
+                                        {% elif order.status == 'completed' %}
+                                            Подтверждён
+                                        {% elif order.status == 'cancelled' %}
+                                            Отменён
+                                        {% else %}
+                                            {{ order.status }}
+                                        {% endif %}
+                                    </p>
+                                    <p>Цена: {{ item.price }} ₽</p>
+                                    <a href="{{ url_for('book', book_id=item.book.id) }}" class="btn secondary">Подробнее</a>
+                                    {% if order.status == 'completed' %}
+                                        <a href="{{ url_for('download_book', book_id=item.book.id) }}" class="btn primary">Скачать</a>
+                                        <a href="{{ url_for('read_book', book_id=item.book.id) }}" class="btn secondary">Читать онлайн</a>
+                                    {% elif order.status == 'pending' %}
+                                        <button class="btn primary" disabled>Ожидает подтверждения</button>
+                                    {% elif order.status == 'cancelled' %}
+                                        <button class="btn danger" disabled>Заказ отменён</button>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endif %}
+
+            {% if current_user.role == 'admin' %}
+            <section id="admin-users" class="profile-section">
+                <h2>Пользователи</h2>
+                <div class="users-list">
+                    {% for user in users %}
+                    <div class="user-card">
+                        <div class="user-info" style="display: flex; flex-direction: column; align-items: center; height: 100%;">
+                            <h3>{{ user.email }}</h3>
+                            <p>Роль: {{ user.role }}</p>
+                            <form method="POST" action="{{ url_for('edit_user', user_id=user.id) }}" style="width: 100%;">
+                                <select name="role">
+                                    <option value="buyer" {% if user.role == 'buyer' %}selected{% endif %}>Покупатель</option>
+                                    <option value="author" {% if user.role == 'author' %}selected{% endif %}>Автор</option>
+                                    <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Админ</option>
+                                </select>
+                                <button type="submit" class="btn secondary" style="width: 100%;">Изменить роль</button>
+                            </form>
+                            <a href="{{ url_for('user_details', user_id=user.id) }}" class="btn secondary" style="width: 100%;">Подробнее</a>
+                            {% if user.id != current_user.id %}
+                            <form method="POST" action="{{ url_for('delete_user', user_id=user.id) }}" style="width: 100%; margin-top: auto;">
+                                <button type="submit" class="btn danger" style="width: 100%;">Удалить</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            <section id="admin-orders" class="profile-section">
+                <h2>Все заказы</h2>
+                <div class="orders-list">
+                    {% for order in all_orders %}
+                    <div class="order-card">
+                        <h4>Заказ #{{ order.id }}</h4>
+                        <p>Покупатель: {{ order.buyer.email }}</p>
+                        <p>Дата: {{ order.created_at.strftime('%d.%m.%Y') }}</p>
+                        <p>Статус: {{ order.status }}</p>
+                        <ul>
+                            {% for item in order.items %}
+                            <li>{{ item.book.title }} — {{ item.price }} ₽</li>
+                            {% endfor %}
+                        </ul>
+                        <a href="{{ url_for('order_details', order_id=order.id) }}" class="btn secondary">Подробнее</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            {% if current_user.role == 'author' %}
+            <section id="upload-book" class="profile-section">
+                <h2>Загрузить новую книгу</h2>
+                <form method="POST" action="{{ url_for('profile') }}" enctype="multipart/form-data">
+                    <input type="hidden" name="form_type" value="upload_book">
+                    <div class="form-group">
+                        <label for="title">Название книги:</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Описание:</label>
+                        <textarea id="description" name="description" rows="6" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="price">Цена (₽):</label>
+                        <input type="number" id="price" name="price" step="0.01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="file_format">Формат файла:</label>
+                        <select id="file_format" name="file_format" required>
+                            <option value="PDF">PDF</option>
+                            <option value="EPUB">EPUB</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="book_file">Файл книги:</label>
+                        <input type="file" id="book_file" name="book_file" accept=".pdf,.epub" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">Категория:</label>
+                        <select id="category" name="category" required>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="country">Страна:</label>
+                        <select id="country" name="country" required>
+                            <option value="">Выберите страну</option>
+                            <option value="Россия">Россия</option>
+                            <option value="США">США</option>
+                            <option value="Великобритания">Великобритания</option>
+                            <option value="Франция">Франция</option>
+                            <option value="Германия">Германия</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="period">Период:</label>
+                        <select id="period" name="period" required>
+                            <option value="">Выберите период</option>
+                            <option value="Классика">Классика</option>
+                            <option value="Современная литература">Современная литература</option>
+                            <option value="Новинки">Новинки</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cover_image">Обложка книги:</label>
+                        <input type="file" id="cover_image" name="cover_image" accept="image/*">
+                    </div>
+
+                    <button type="submit" class="btn primary">Загрузить книгу</button>
+                </form>
+            </section>
+            {% endif %}
+
+        </div>{# /.profile-main #}
+    </div>{# /.profile-content #}
+</div>{# /.profile-page #}
+
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %} 
